@@ -530,11 +530,16 @@ with left:
     if st.session_state.current_step_status:
         st.markdown("<div style='height:18px'></div>", unsafe_allow_html=True)
         st.markdown('<div class="section-label">Pipeline</div>', unsafe_allow_html=True)
-        for step in st.session_state.current_step_status:
-            st.markdown(
-                f'<div class="status-pill">● {step}</div>',
-                unsafe_allow_html=True,
-            )
+        steps = st.session_state.current_step_status
+        step_icons = ["✦", "⬡", "◈"]
+        chain_html = '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:12px;">'
+        for i, step in enumerate(steps):
+            icon = step_icons[i] if i < len(step_icons) else "●"
+            chain_html += f'<div class="status-pill">{icon} {step}</div>'
+            if i < len(steps) - 1:
+                chain_html += '<div style="color:#475569;font-size:18px;padding:0 2px;">→</div>'
+        chain_html += "</div>"
+        st.markdown(chain_html, unsafe_allow_html=True)
 
 with right:
     if st.session_state.current_diagram:
