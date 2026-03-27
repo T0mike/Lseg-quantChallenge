@@ -23,10 +23,10 @@ class MermaidAgent:
     def from_env(cls) -> "MermaidAgent":
         return cls(settings=MermaidAgentSettings.from_env())
 
-    def generate_diagram(self, description: str) -> str:
-        diagram = self._chain.invoke({"description": description})
+    def generate_diagram(self, description: str, analysis: str = "") -> str:
+        diagram = self._chain.invoke({"description": description, "analysis": analysis})
         return normalize_mermaid(diagram)
 
-    def stream_diagram(self, description: str):
-        for chunk in self._chain.stream({"description": description}):
+    def stream_diagram(self, description: str, analysis: str = ""):
+        for chunk in self._chain.stream({"description": description, "analysis": analysis}):
             yield chunk
