@@ -10,7 +10,7 @@ of processing modules living under `src/`. Each module is a self-contained
 pipeline stage with its own LLM configuration, prompts, and logic.
 
 ```
-User input → [preprocessing] → [generation] → Mermaid diagram
+User input → [preprocessing] → [analysis] → [generation] → [enhancement] → Mermaid diagram
 ```
 
 ### Processing pipeline
@@ -19,9 +19,18 @@ User input → [preprocessing] → [generation] → Mermaid diagram
    non-English user input and rewrites it into a clear, precise English
    description optimized for Mermaid diagram generation.
 
-2. **Generation** (`src/generation/`) — Converts the optimized description into
-   valid Mermaid syntax. Handles code-fence stripping, diagram-type detection,
-   validation, and Streamlit rendering.
+2. **Analysis** (`src/analysis/`) — Examines the optimized description and
+   produces a structured architectural analysis (diagram type, components,
+   relationships, decision points, best practices) that guides generation.
+
+3. **Generation** (`src/generation/`) — Converts the optimized description and
+   analysis into valid Mermaid syntax. Handles code-fence stripping,
+   diagram-type detection, validation, and Streamlit rendering.
+
+4. **Enhancement** (`src/enhancement/`) — Post-generation step that suggests
+   AI-powered improvements to the diagram. Presents suggestions in an
+   interactive UI where the user can preview and accept individual changes.
+   Accepted suggestions are merged into the diagram reactively.
 
 ### Module conventions
 
@@ -32,15 +41,16 @@ Every module under `src/` follows the same structure:
 | `__init__.py` | Public API exports |
 | `config.py` | Dataclass settings loaded from environment variables |
 | `prompts.py` | LangChain `ChatPromptTemplate` definitions |
-| `agent.py` or `optimizer.py` | Core logic class that wires prompt → model → parser |
+| `agent.py`, `optimizer.py`, or `enhancer.py` | Core logic class that wires prompt → model → parser |
 | `models.py` | `init_chat_model()` wrapper with error handling (if present) |
+| `schemas.py` | Pydantic models for structured LLM output (if present) |
 | `exceptions.py` | Module-specific exception hierarchy (if present) |
 
 ### Key files
 
 | Path | Purpose |
 |------|---------|
-| `main.py` | Streamlit entry point; wires preprocessing → generation |
+| `main.py` | Streamlit entry point; wires preprocessing → analysis → generation → enhancement |
 | `pyproject.toml` | Dependencies and project metadata |
 | `data/initial.txt` | Sample input for testing |
 | `.streamlit/secrets.toml` | Local API keys (not committed) |
