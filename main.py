@@ -1,6 +1,6 @@
 import streamlit as st
 
-from src.naive import MermaidAgent, MermaidAgentError, render_mermaid_diagram
+from src.naive import MermaidAgent, MermaidAgentError, normalize_mermaid, render_mermaid_diagram
 
 
 st.set_page_config(page_title="LSEG Quant Challenge", layout="centered")
@@ -29,9 +29,23 @@ if submitted:
     if not description.strip():
         st.warning("Enter a description before generating a diagram.")
     else:
+        desc = description.strip()
+        cache_key = f"diagram::{desc}"
+
         try:
-            with st.spinner("Generating Mermaid diagram..."):
-                diagram = get_mermaid_agent().generate_diagram(description.strip())
+            if cache_key in st.session_state:
+                diagram = st.session_state[cache_key]
+                st.caption("Loaded from cache.")
+            else:
+                raw = ""
+                placeholder = st.empty()
+                for chunk in get_mermaid_agent().stream_diagram(desc):
+                    raw += chunk
+                    placeholder.code(raw, language="mermaid")
+                placeholder.empty()
+                diagram = normalize_mermaid(raw)
+                st.session_state[cache_key] = diagram
+
             st.subheader("Diagram")
             render_mermaid_diagram(diagram)
             with st.expander("Mermaid source"):

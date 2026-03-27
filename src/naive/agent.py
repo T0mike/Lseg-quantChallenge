@@ -26,3 +26,7 @@ class MermaidAgent:
     def generate_diagram(self, description: str) -> str:
         diagram = self._chain.invoke({"description": description})
         return normalize_mermaid(diagram)
+
+    def stream_diagram(self, description: str):
+        for chunk in self._chain.stream({"description": description}):
+            yield chunk
