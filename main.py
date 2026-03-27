@@ -1,7 +1,7 @@
 import streamlit as st
 
 from src.preprocessing import PromptOptimizer
-from src.naive import MermaidAgent, MermaidAgentError, normalize_mermaid, render_mermaid_diagram
+from src.generation import MermaidAgent, MermaidAgentError, normalize_mermaid, render_mermaid_diagram
 
 
 st.set_page_config(page_title="LSEG Quant Challenge", layout="centered")

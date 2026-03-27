@@ -1,4 +1,4 @@
-"""Naive Mermaid generation package."""
+"""Mermaid diagram generation package."""
 
 from .agent import MermaidAgent
 from .config import MermaidAgentSettings
