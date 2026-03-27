@@ -69,3 +69,30 @@ def build_apply_prompt() -> ChatPromptTemplate:
             ),
         ],
     )
+
+
+FREEFORM_SYSTEM_PROMPT = """\
+You are a Mermaid diagram editor.
+
+You receive the current Mermaid diagram and a natural language instruction
+from the user describing how to change it.
+
+Rules:
+- Apply the requested change to the diagram.
+- Preserve everything the user did NOT ask to change.
+- Return valid Mermaid code only — no code fences, no explanation.
+"""
+
+
+def build_freeform_prompt() -> ChatPromptTemplate:
+    return ChatPromptTemplate.from_messages(
+        [
+            ("system", FREEFORM_SYSTEM_PROMPT),
+            (
+                "human",
+                "Current diagram:\n{diagram}\n\n"
+                "User instruction:\n{instruction}\n\n"
+                "Return the updated Mermaid diagram.",
+            ),
+        ],
+    )

@@ -192,5 +192,52 @@ if submitted:
                     with st.expander("Enhanced Mermaid source"):
                         st.code(merged, language="mermaid")
 
+            # Step 5: Freeform natural-language edits
+            st.subheader("Edit with Natural Language")
+            current = st.session_state.get(current_diagram_key, diagram)
+
+            edit_history_key = f"edit_history::{cache_key}"
+            if edit_history_key not in st.session_state:
+                st.session_state[edit_history_key] = []
+
+            with st.form("freeform-edit", clear_on_submit=True):
+                instruction = st.text_area(
+                    "Describe how to modify the diagram",
+                    placeholder=(
+                        "Example: Add an error handling path from the risk engine "
+                        "back to the user. Color all decision nodes in yellow."
+                    ),
+                    height=100,
+                )
+                edit_submitted = st.form_submit_button("Apply change")
+
+            if edit_submitted and instruction.strip():
+                with st.spinner("Applying your change..."):
+                    updated = get_enhancer().freeform_edit(
+                        current, instruction.strip()
+                    )
+                    st.session_state[edit_history_key].append(
+                        {"instruction": instruction.strip(), "diagram": current}
+                    )
+                    st.session_state[current_diagram_key] = updated
+                    st.rerun()
+
+            # Show current working diagram if edits were applied
+            edit_history = st.session_state.get(edit_history_key, [])
+            if edit_history:
+                st.subheader("Current Diagram")
+                render_mermaid_diagram(current)
+                with st.expander("Current Mermaid source"):
+                    st.code(current, language="mermaid")
+
+                with st.expander(f"Edit history ({len(edit_history)} edit(s))"):
+                    for i, entry in enumerate(edit_history, 1):
+                        st.markdown(f"**{i}.** {entry['instruction']}")
+
+                if st.button("Undo last edit", key=f"undo_{cache_key}"):
+                    last = st.session_state[edit_history_key].pop()
+                    st.session_state[current_diagram_key] = last["diagram"]
+                    st.rerun()
+
         except MermaidAgentError as exc:
             st.error(str(exc))

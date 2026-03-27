@@ -7,7 +7,7 @@ from langchain.chat_models import init_chat_model
 from langchain_core.output_parsers import StrOutputParser, JsonOutputParser
 
 from .config import EnhancementSettings
-from .prompts import build_suggest_prompt, build_apply_prompt
+from .prompts import build_suggest_prompt, build_apply_prompt, build_freeform_prompt
 from .schemas import EnhancementResponse, Suggestion
 
 
@@ -26,6 +26,9 @@ class DiagramEnhancer:
         )
         self._apply_chain = (
             build_apply_prompt() | model | StrOutputParser()
+        )
+        self._freeform_chain = (
+            build_freeform_prompt() | model | StrOutputParser()
         )
 
     @classmethod
@@ -63,3 +66,18 @@ class DiagramEnhancer:
             if len(lines) >= 3:
                 return "\n".join(lines[1:-1]).strip()
         return stripped
+
+    @staticmethod
+    def _strip_fences(text: str) -> str:
+        stripped = text.strip()
+        if stripped.startswith("```") and stripped.endswith("```"):
+            lines = stripped.splitlines()
+            if len(lines) >= 3:
+                return "\n".join(lines[1:-1]).strip()
+        return stripped
+
+    def freeform_edit(self, diagram: str, instruction: str) -> str:
+        result = self._freeform_chain.invoke(
+            {"diagram": diagram, "instruction": instruction}
+        )
+        return self._strip_fences(result)
