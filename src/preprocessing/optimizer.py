@@ -10,8 +10,8 @@ from .prompts import build_optimizer_prompt
 
 @dataclass
 class PromptOptimizer:
-    model_name: str = "claude-haiku-4-5-20251001"
-    model_provider: str = "anthropic"
+    model_name: str = "gpt-5.4"
+    model_provider: str = "openai"
 
     def __post_init__(self) -> None:
         model = init_chat_model(
