@@ -7,7 +7,7 @@ Given a refined diagram description, analyze it thoroughly and return a structur
 Your analysis must include:
 - diagram_type: always "flowchart" — do not use any other diagram type
 - components: all explicit entities, actors, systems, or nodes present in the description — each with a name and shape
-- inferred_components: components NOT mentioned by the user but logically necessary given the domain — infer them like a senior architect would (e.g. error handlers, audit logs, queues, auth services, retry mechanisms) — each with a name and shape
+- inferred_components: at most 2-3 components that are critically missing and without which the flow would be broken — do not pad this list; if the description is already complete, return an empty list
 - relationships: all connections and interactions between components, with direction and action
 - decision_points: all branching logic, conditions, or gateways (e.g. "Is order valid?", "Sufficient balance?")
 - best_practices: architectural improvements to add for correctness, resilience, or clarity

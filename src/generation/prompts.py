@@ -29,22 +29,14 @@ CRITICAL — use the correct Mermaid shape syntax for every node based on the sh
 
 Never default all nodes to rectangles. Every node must use its assigned shape.
 
-EDGE LABELS — every arrow must have a label describing the action or relationship:
-  Use -->|label| syntax. Never use bare --> arrows without a label.
-  Example: A -->|submits order| B
+EDGE LABELS — add a short label (2-4 words max) only on arrows where the action is not obvious from context. Skip labels on self-evident transitions.
 
-COLORS — after all nodes and edges, add classDef rules and assign each node to its class:
-  classDef rounded_cls    fill:#10b981,stroke:#059669,color:#fff
-  classDef rectangle_cls  fill:#6366f1,stroke:#4f46e5,color:#fff
-  classDef diamond_cls    fill:#f59e0b,stroke:#d97706,color:#000
-  classDef cylinder_cls   fill:#3b82f6,stroke:#2563eb,color:#fff
-  classDef circle_cls     fill:#ec4899,stroke:#db2777,color:#fff
-  classDef asymmetric_cls fill:#8b5cf6,stroke:#7c3aed,color:#fff
-  classDef parallel_cls   fill:#14b8a6,stroke:#0d9488,color:#fff
-  classDef subroutine_cls fill:#f97316,stroke:#ea580c,color:#fff
-
-  Then assign each node: class NodeId shape_cls
-  Example: class A rounded_cls
+COLORS — add one classDef block at the end grouping nodes by shape type, then assign with class:
+  classDef decision fill:#f59e0b,stroke:#d97706,color:#000
+  classDef db        fill:#3b82f6,stroke:#2563eb,color:#fff
+  classDef endpoint  fill:#10b981,stroke:#059669,color:#fff
+  classDef external  fill:#f97316,stroke:#ea580c,color:#fff
+  Only define classes that are actually used.
 """
 
 
