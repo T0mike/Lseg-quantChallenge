@@ -10,19 +10,21 @@ uv run streamlit run main.py
 
 ## Configuration
 
-Set an API key for your LangChain provider before running the app.
-
-OpenAI example:
+For local Streamlit runs, put secrets in `.streamlit/secrets.toml`.
 
 ```bash
-export OPENAI_API_KEY=your_api_key
-uv run streamlit run main.py
+mkdir -p .streamlit
 ```
 
-Optional overrides:
+Example:
 
-```bash
-export MERMAID_AGENT_PROVIDER=openai
-export MERMAID_AGENT_MODEL=gpt-4.1-mini
-export MERMAID_AGENT_TEMPERATURE=0
+```toml
+OPENAI_API_KEY = "your_api_key"
+ANTHROPIC_API_KEY = "your_api_key"
+MERMAID_AGENT_PROVIDER = "openai"
+MERMAID_AGENT_MODEL = "gpt-4.1-mini"
+MERMAID_AGENT_TEMPERATURE = "0"
 ```
+
+When you run `uv run streamlit run main.py`, Streamlit loads root-level secrets from
+`.streamlit/secrets.toml` and makes them available as environment variables for the app.
