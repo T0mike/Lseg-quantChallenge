@@ -374,20 +374,29 @@ def generate_diagram(description: str) -> None:
         load_cached_diagram(cache_key)
         return
 
-    refined = get_optimizer().optimize(raw)
-    analysis = get_analyzer().analyze(refined)
-    analysis_json = json.dumps(analysis.model_dump(), indent=2)
+    with st.status("✦  Refining prompt...", expanded=True) as s1:
+        refined = get_optimizer().optimize(raw)
+        st.write(refined)
+        s1.update(label="✦  Prompt refined", state="complete", expanded=False)
 
-    raw_mermaid = ""
-    placeholder = st.empty()
-    try:
-        for chunk in get_mermaid_agent().stream_diagram(refined, analysis_json):
-            raw_mermaid += chunk
-            placeholder.code(raw_mermaid, language="mermaid")
-    finally:
-        placeholder.empty()
+    with st.status("⬡  Analyzing architecture...", expanded=True) as s2:
+        analysis = get_analyzer().analyze(refined)
+        analysis_json = json.dumps(analysis.model_dump(), indent=2)
+        st.write(f"Diagram type: **{analysis.diagram_type}** · {len(analysis.components)} components · {len(analysis.inferred_components)} inferred")
+        s2.update(label="⬡  Architecture analyzed", state="complete", expanded=False)
 
-    diagram = normalize_mermaid(raw_mermaid)
+    with st.status("◈  Generating diagram...", expanded=True) as s3:
+        raw_mermaid = ""
+        placeholder = st.empty()
+        try:
+            for chunk in get_mermaid_agent().stream_diagram(refined, analysis_json):
+                raw_mermaid += chunk
+                placeholder.code(raw_mermaid, language="mermaid")
+        finally:
+            placeholder.empty()
+        diagram = normalize_mermaid(raw_mermaid)
+        s3.update(label="◈  Diagram generated", state="complete", expanded=False)
+
     st.session_state[cache_key] = (refined, analysis, diagram)
     st.session_state.current_cache_key = cache_key
     st.session_state.current_description = raw
