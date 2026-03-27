@@ -1,6 +1,6 @@
 import streamlit as st
 
-from py_processing import PromptOptimizer
+from src.preprocessing import PromptOptimizer
 from src.naive import MermaidAgent, MermaidAgentError, normalize_mermaid, render_mermaid_diagram
 
 
