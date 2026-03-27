@@ -414,7 +414,7 @@ def render_analysis_cards(analysis) -> None:
         ("Components", format_list(analysis.components)),
         ("Relationships", format_list(analysis.relationships)),
         ("Decision Points", format_list(analysis.decision_points)),
-        ("Missing", format_list(analysis.missing_components, "No gaps detected")),
+        ("Inferred", format_list(analysis.inferred_components, "No gaps detected")),
         ("Best Practices", format_list(analysis.best_practices, "No guidance returned")),
     ]
 

@@ -22,7 +22,7 @@ class Component(BaseModel):
 class DiagramAnalysis(BaseModel):
     diagram_type: str
     components: list[Component]
-    missing_components: list[Component]
+    inferred_components: list[Component]
     relationships: list[str]
     decision_points: list[str]
     best_practices: list[str]
