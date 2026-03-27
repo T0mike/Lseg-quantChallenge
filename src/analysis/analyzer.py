@@ -11,8 +11,8 @@ from .schemas import DiagramAnalysis
 
 @dataclass
 class DiagramAnalyzer:
-    model_name: str = "claude-sonnet-4-6"
-    model_provider: str = "anthropic"
+    model_name: str = "gpt-5.4"
+    model_provider: str = "openai"
 
     def __post_init__(self) -> None:
         model = init_chat_model(

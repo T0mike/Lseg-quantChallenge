@@ -6,8 +6,8 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class MermaidAgentSettings:
-    model_name: str = "claude-haiku-4-5-20251001"
-    model_provider: str = "anthropic"
+    model_name: str = "gpt-5.4"
+    model_provider: str = "openai"
     temperature: float = 0.0
 
     @classmethod
