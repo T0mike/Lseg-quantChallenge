@@ -1,0 +1,1 @@
+I want an orchestrator tool that receives a user query append history applies azure guardrails and then decides to which component to use from a sentiment, summarizations, or drawing tools. I want the tools to be in red and the classificator in green
