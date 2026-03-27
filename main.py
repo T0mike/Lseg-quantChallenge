@@ -1,6 +1,7 @@
-def main():
-    print("Hello from lseg-quantchallenge!")
+import streamlit as st
 
 
-if __name__ == "__main__":
-    main()
+st.set_page_config(page_title="LSEG Quant Challenge", layout="centered")
+
+st.title("LSEG Quant Challenge")
+st.write("Minimal Streamlit app is running.")
