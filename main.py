@@ -69,10 +69,10 @@ if submitted:
                         st.markdown(f"**Diagram type:** `{analysis.diagram_type}`")
                         st.markdown("**Components:**")
                         for c in analysis.components:
-                            st.markdown(f"- {c}")
+                            st.markdown(f"- {c.name} `{c.shape}`")
                         st.markdown("**Missing components:**")
                         for c in analysis.missing_components:
-                            st.markdown(f"- {c}")
+                            st.markdown(f"- {c.name} `{c.shape}`")
                     with col2:
                         st.markdown("**Relationships:**")
                         for r in analysis.relationships:
